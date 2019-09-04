@@ -1,15 +1,15 @@
-#ifndef custom_layout_hpp
-#define custom_layout_hpp
+#ifndef animated_layout_hpp
+#define animated_layout_hpp
 
 #include <QLayout>
 #include <chrono>
 #include <vector>
 
-class CustomLayout : public QLayout
+class AnimatedLayout : public QLayout
 {
 public:
-    CustomLayout();
-    ~CustomLayout();
+    AnimatedLayout();
+    ~AnimatedLayout();
 
     void         addItem(QLayoutItem* item) override;
     void         addWidget(QWidget* widget);
@@ -27,4 +27,4 @@ private:
     std::chrono::system_clock::time_point m_origin_time;
 };
 
-#endif /* custom_layout_hpp */
+#endif /* animated_layout_hpp */

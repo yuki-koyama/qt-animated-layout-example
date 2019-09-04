@@ -1,10 +1,10 @@
-#include "custom-layout.hpp"
+#include "animated-layout.hpp"
 #include <QWidget>
 #include <cmath>
 
-CustomLayout::CustomLayout() : m_elapsed_time(0.0), m_origin_time(std::chrono::system_clock::now()) {}
+AnimatedLayout::AnimatedLayout() : m_elapsed_time(0.0), m_origin_time(std::chrono::system_clock::now()) {}
 
-CustomLayout::~CustomLayout()
+AnimatedLayout::~AnimatedLayout()
 {
     QLayoutItem* item = takeAt(0);
     while (item != nullptr)
@@ -15,18 +15,18 @@ CustomLayout::~CustomLayout()
     }
 }
 
-void CustomLayout::addItem(QLayoutItem* item) { m_items.push_back(item); }
+void AnimatedLayout::addItem(QLayoutItem* item) { m_items.push_back(item); }
 
-void CustomLayout::addWidget(QWidget* widget) { addItem(new QWidgetItem(widget)); }
+void AnimatedLayout::addWidget(QWidget* widget) { addItem(new QWidgetItem(widget)); }
 
-int CustomLayout::count() const { return m_items.size(); }
+int AnimatedLayout::count() const { return m_items.size(); }
 
-QLayoutItem* CustomLayout::itemAt(int index) const
+QLayoutItem* AnimatedLayout::itemAt(int index) const
 {
     return (index < 0 || index >= this->count()) ? nullptr : m_items[index];
 }
 
-QLayoutItem* CustomLayout::takeAt(int index)
+QLayoutItem* AnimatedLayout::takeAt(int index)
 {
     if (index < 0 || index >= this->count())
     {
@@ -40,9 +40,9 @@ QLayoutItem* CustomLayout::takeAt(int index)
     return item;
 }
 
-QSize CustomLayout::sizeHint() const { return QSize(600, 400); }
+QSize AnimatedLayout::sizeHint() const { return QSize(600, 400); }
 
-void CustomLayout::setGeometry(const QRect& rect)
+void AnimatedLayout::setGeometry(const QRect& rect)
 {
     const std::chrono::system_clock::time_point current_time = std::chrono::system_clock::now();
     const std::chrono::duration<double>         diff         = current_time - m_origin_time;

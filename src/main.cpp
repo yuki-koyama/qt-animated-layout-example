@@ -1,4 +1,4 @@
-#include "custom-layout.hpp"
+#include "animated-layout.hpp"
 #include <QApplication>
 #include <QLabel>
 #include <QTimer>
@@ -10,7 +10,7 @@ class CustomWidget : public QWidget
 public:
     CustomWidget() : QWidget(nullptr)
     {
-        CustomLayout* layout = new CustomLayout();
+        AnimatedLayout* layout = new AnimatedLayout();
         layout->addWidget(new QLabel("Hello World!"));
 
         this->setLayout(layout);
