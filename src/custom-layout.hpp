@@ -7,6 +7,8 @@
 class CustomLayout : public QLayout
 {
 public:
+    ~CustomLayout();
+
     void         addItem(QLayoutItem* item) override;
     int          count() const override;
     QLayoutItem* itemAt(int index) const override;

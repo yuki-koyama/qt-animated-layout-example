@@ -1,5 +1,16 @@
 #include "custom-layout.hpp"
 
+CustomLayout::~CustomLayout()
+{
+    QLayoutItem* item = takeAt(0);
+    while (item != nullptr)
+    {
+        delete item;
+
+        item = takeAt(0);
+    }
+}
+
 void CustomLayout::addItem(QLayoutItem* item) { m_items.push_back(item); }
 
 int CustomLayout::count() const { return m_items.size(); }
@@ -11,6 +22,11 @@ QLayoutItem* CustomLayout::itemAt(int index) const
 
 QLayoutItem* CustomLayout::takeAt(int index)
 {
+    if (index < 0 || index >= this->count())
+    {
+        return nullptr;
+    }
+
     QLayoutItem* item = m_items[index];
 
     m_items.erase(m_items.begin() + index);
