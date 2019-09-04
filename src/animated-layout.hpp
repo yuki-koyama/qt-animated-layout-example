@@ -1,6 +1,7 @@
 #ifndef animated_layout_hpp
 #define animated_layout_hpp
 
+#include <Eigen/Core>
 #include <QLayout>
 #include <chrono>
 #include <vector>
@@ -20,10 +21,20 @@ public:
     QSize sizeHint() const override;
     void  setGeometry(const QRect& rect) override;
 
+    void setRandomTargetPositions();
+
 private:
-    std::vector<QLayoutItem*> m_items;
+    struct ItemWrapper
+    {
+        QLayoutItem*    item;
+        Eigen::Vector2d target_position;
+        Eigen::Vector2d current_position;
+    };
+
+    std::vector<ItemWrapper> m_item_wrappers;
 
     double                                m_elapsed_time;
+    std::chrono::system_clock::time_point m_previous_time;
     std::chrono::system_clock::time_point m_origin_time;
 };
 

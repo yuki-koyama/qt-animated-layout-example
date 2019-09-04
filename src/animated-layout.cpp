@@ -2,7 +2,11 @@
 #include <QWidget>
 #include <cmath>
 
-AnimatedLayout::AnimatedLayout() : m_elapsed_time(0.0), m_origin_time(std::chrono::system_clock::now()) {}
+AnimatedLayout::AnimatedLayout()
+    : m_elapsed_time(0.0), m_previous_time(std::chrono::system_clock::now()),
+      m_origin_time(std::chrono::system_clock::now())
+{
+}
 
 AnimatedLayout::~AnimatedLayout()
 {
@@ -15,15 +19,15 @@ AnimatedLayout::~AnimatedLayout()
     }
 }
 
-void AnimatedLayout::addItem(QLayoutItem* item) { m_items.push_back(item); }
+void AnimatedLayout::addItem(QLayoutItem* item) { m_item_wrappers.push_back({item, {300.0, 200.0}, {300.0, 300.0}}); }
 
 void AnimatedLayout::addWidget(QWidget* widget) { addItem(new QWidgetItem(widget)); }
 
-int AnimatedLayout::count() const { return m_items.size(); }
+int AnimatedLayout::count() const { return m_item_wrappers.size(); }
 
 QLayoutItem* AnimatedLayout::itemAt(int index) const
 {
-    return (index < 0 || index >= this->count()) ? nullptr : m_items[index];
+    return (index < 0 || index >= this->count()) ? nullptr : m_item_wrappers[index].item;
 }
 
 QLayoutItem* AnimatedLayout::takeAt(int index)
@@ -33,9 +37,9 @@ QLayoutItem* AnimatedLayout::takeAt(int index)
         return nullptr;
     }
 
-    QLayoutItem* item = m_items[index];
+    QLayoutItem* item = m_item_wrappers[index].item;
 
-    m_items.erase(m_items.begin() + index);
+    m_item_wrappers.erase(m_item_wrappers.begin() + index);
 
     return item;
 }
@@ -44,20 +48,42 @@ QSize AnimatedLayout::sizeHint() const { return QSize(600, 400); }
 
 void AnimatedLayout::setGeometry(const QRect& rect)
 {
-    const std::chrono::system_clock::time_point current_time = std::chrono::system_clock::now();
-    const std::chrono::duration<double>         diff         = current_time - m_origin_time;
-
-    m_elapsed_time = diff.count();
-
     QLayout::setGeometry(rect);
 
-    constexpr int w = 100;
-    constexpr int h = 100;
+    const std::chrono::system_clock::time_point current_time = std::chrono::system_clock::now();
+    const std::chrono::duration<double>         elapsed_time = current_time - m_origin_time;
+    const std::chrono::duration<double>         delta_time   = current_time - m_previous_time;
 
-    for (QLayoutItem* item : m_items)
+    m_elapsed_time  = elapsed_time.count();
+    m_previous_time = current_time;
+
+    constexpr int    w     = 100;
+    constexpr int    h     = 100;
+    constexpr double decay = 5.0;
+
+    for (ItemWrapper& item_wrapper : m_item_wrappers)
     {
-        const QRect geom(rect.x(), rect.y() + 0.5 * (1.0 + std::sin(m_elapsed_time)) * rect.height() - h / 2, w, h);
+        const Eigen::Vector2d& target_position  = item_wrapper.target_position;
+        const Eigen::Vector2d& current_position = item_wrapper.current_position;
 
-        item->setGeometry(geom);
+        const Eigen::Vector2d new_position =
+            target_position - (target_position - current_position) * std::exp(-decay * delta_time.count());
+
+        const QRect geom(rect.x() - w / 2 + new_position(0), rect.y() - h / 2 + new_position(1), w, h);
+
+        item_wrapper.item->setGeometry(geom);
+        item_wrapper.current_position = new_position;
+    }
+}
+
+void AnimatedLayout::setRandomTargetPositions()
+{
+    const auto random_position_generator = [](const int width, const int height) -> Eigen::Vector2d {
+        return (0.5 * (Eigen::Array2d::Random() + Eigen::Array2d::Ones()) * Eigen::Array2d(width, height)).matrix();
+    };
+
+    for (ItemWrapper& item_wrapper : m_item_wrappers)
+    {
+        item_wrapper.target_position = random_position_generator(this->geometry().width(), this->geometry().height());
     }
 }
