@@ -7,12 +7,12 @@
 class CustomLayout : public QLayout
 {
 public:
-    void         addItem(QLayoutItem* item) override { m_items.push_back(item); }
-    int          count() const override { return m_items.size(); }
+    void         addItem(QLayoutItem* item) override;
+    int          count() const override;
     QLayoutItem* itemAt(int index) const override;
     QLayoutItem* takeAt(int index) override;
 
-    QSize sizeHint() const override { return QSize(); }
+    QSize sizeHint() const override;
 
 private:
     std::vector<QLayoutItem*> m_items;
