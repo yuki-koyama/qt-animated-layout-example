@@ -13,15 +13,20 @@ public:
     {
         animated_layout = new AnimatedLayout();
 
-        QLabel* label_green = new QLabel("Press\nSpace Key!");
-        label_green->setStyleSheet("background-color: rgba(64, 128, 128, 0.5);");
-        label_green->setAlignment(Qt::AlignCenter);
-        animated_layout->addWidget(label_green);
+        QLabel* label_c = new QLabel("Press\nSpace Key!");
+        label_c->setStyleSheet("background-color: rgba(64, 128, 128, 0.5);");
+        label_c->setAlignment(Qt::AlignCenter);
+        animated_layout->addWidget(label_c);
 
-        QLabel* label_purple = new QLabel("Press\nSpace Key!");
-        label_purple->setStyleSheet("background-color: rgba(128, 64, 128, 0.5);");
-        label_purple->setAlignment(Qt::AlignCenter);
-        animated_layout->addWidget(label_purple);
+        QLabel* label_m = new QLabel("Press\nSpace Key!");
+        label_m->setStyleSheet("background-color: rgba(128, 64, 128, 0.5);");
+        label_m->setAlignment(Qt::AlignCenter);
+        animated_layout->addWidget(label_m);
+
+        QLabel* label_y = new QLabel("Press\nSpace Key!");
+        label_y->setStyleSheet("background-color: rgba(128, 128, 64, 0.5);");
+        label_y->setAlignment(Qt::AlignCenter);
+        animated_layout->addWidget(label_y);
 
         this->setLayout(animated_layout);
 
