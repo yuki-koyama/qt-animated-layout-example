@@ -1,5 +1,8 @@
 #include "custom-layout.hpp"
 #include <QWidget>
+#include <cmath>
+
+CustomLayout::CustomLayout() : m_elapsed_time(0.0), m_origin_time(std::chrono::system_clock::now()) {}
 
 CustomLayout::~CustomLayout()
 {
@@ -41,6 +44,11 @@ QSize CustomLayout::sizeHint() const { return QSize(600, 400); }
 
 void CustomLayout::setGeometry(const QRect& rect)
 {
+    const std::chrono::system_clock::time_point current_time = std::chrono::system_clock::now();
+    const std::chrono::duration<double>         diff         = current_time - m_origin_time;
+
+    m_elapsed_time = diff.count();
+
     QLayout::setGeometry(rect);
 
     constexpr int w = 100;
@@ -48,7 +56,8 @@ void CustomLayout::setGeometry(const QRect& rect)
 
     for (QLayoutItem* item : m_items)
     {
-        const QRect geom(rect.x(), rect.y(), w, h);
+        const QRect geom(rect.x(), rect.y() + 0.5 * (1.0 + std::sin(m_elapsed_time)) * rect.height() - h / 2, w, h);
+
         item->setGeometry(geom);
     }
 }
