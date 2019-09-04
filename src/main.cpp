@@ -2,14 +2,14 @@
 #include <QApplication>
 #include <QKeyEvent>
 #include <QLabel>
+#include <QOpenGLWidget>
 #include <QTimer>
-#include <QWidget>
 #include <memory>
 
-class CustomWidget : public QWidget
+class CustomWidget : public QOpenGLWidget
 {
 public:
-    CustomWidget() : QWidget(nullptr)
+    CustomWidget() : QOpenGLWidget(nullptr)
     {
         animated_layout = new AnimatedLayout();
 
