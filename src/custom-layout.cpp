@@ -1,4 +1,5 @@
 #include "custom-layout.hpp"
+#include <QWidget>
 
 CustomLayout::~CustomLayout()
 {
@@ -12,6 +13,8 @@ CustomLayout::~CustomLayout()
 }
 
 void CustomLayout::addItem(QLayoutItem* item) { m_items.push_back(item); }
+
+void CustomLayout::addWidget(QWidget* widget) { addItem(new QWidgetItem(widget)); }
 
 int CustomLayout::count() const { return m_items.size(); }
 
@@ -35,3 +38,17 @@ QLayoutItem* CustomLayout::takeAt(int index)
 }
 
 QSize CustomLayout::sizeHint() const { return QSize(600, 400); }
+
+void CustomLayout::setGeometry(const QRect& rect)
+{
+    QLayout::setGeometry(rect);
+
+    constexpr int w = 100;
+    constexpr int h = 100;
+
+    for (QLayoutItem* item : m_items)
+    {
+        const QRect geom(rect.x(), rect.y(), w, h);
+        item->setGeometry(geom);
+    }
+}
