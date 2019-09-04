@@ -1,6 +1,6 @@
+#include "custom-layout.hpp"
 #include <QApplication>
 #include <QWidget>
-#include "custom-layout.hpp"
 
 class CustomWidget : public QWidget
 {
