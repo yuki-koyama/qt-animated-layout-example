@@ -1,9 +1,16 @@
 #include <QApplication>
 #include <QWidget>
+#include "custom-layout.hpp"
 
 class CustomWidget : public QWidget
 {
+public:
+    CustomWidget() : QWidget(nullptr)
+    {
+        CustomLayout* layout = new CustomLayout();
 
+        this->setLayout(layout);
+    }
 };
 
 int main(int argc, char* argv[])
