@@ -3,8 +3,6 @@
 #include <QKeyEvent>
 #include <QLabel>
 #include <QOpenGLWidget>
-#include <QTimer>
-#include <memory>
 
 class CustomWidget : public QOpenGLWidget
 {
@@ -29,11 +27,6 @@ public:
         animated_layout->addWidget(label_y);
 
         this->setLayout(animated_layout);
-
-        m_timer = std::make_unique<QTimer>();
-        m_timer->callOnTimeout([=]() { animated_layout->update(); });
-        m_timer->setInterval(1000 / 60);
-        m_timer->start();
     }
 
 protected:
@@ -46,8 +39,7 @@ protected:
     }
 
 private:
-    std::unique_ptr<QTimer> m_timer;
-    AnimatedLayout*         animated_layout;
+    AnimatedLayout* animated_layout;
 };
 
 int main(int argc, char* argv[])

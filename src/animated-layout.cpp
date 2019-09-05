@@ -1,4 +1,5 @@
 #include "animated-layout.hpp"
+#include <QTimer>
 #include <QWidget>
 #include <cmath>
 
@@ -6,6 +7,10 @@ AnimatedLayout::AnimatedLayout()
     : m_elapsed_time(0.0), m_previous_time(std::chrono::system_clock::now()),
       m_origin_time(std::chrono::system_clock::now())
 {
+    m_timer = std::make_unique<QTimer>();
+    m_timer->callOnTimeout([=]() { this->update(); });
+    m_timer->setInterval(1000 / 60);
+    m_timer->start();
 }
 
 AnimatedLayout::~AnimatedLayout()
@@ -75,6 +80,10 @@ void AnimatedLayout::setGeometry(const QRect& rect)
         item_wrapper.current_position = new_position;
     }
 }
+
+void AnimatedLayout::play() { m_timer->stop(); }
+
+void AnimatedLayout::stop() { m_timer->start(); }
 
 void AnimatedLayout::setRandomTargetPositions()
 {

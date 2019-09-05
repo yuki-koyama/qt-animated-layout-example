@@ -4,7 +4,10 @@
 #include <Eigen/Core>
 #include <QLayout>
 #include <chrono>
+#include <memory>
 #include <vector>
+
+class QTimer;
 
 class AnimatedLayout : public QLayout
 {
@@ -21,6 +24,9 @@ public:
     QSize sizeHint() const override;
     void  setGeometry(const QRect& rect) override;
 
+    void play();
+    void stop();
+
     void setRandomTargetPositions();
 
 private:
@@ -36,6 +42,8 @@ private:
     double                                m_elapsed_time;
     std::chrono::system_clock::time_point m_previous_time;
     std::chrono::system_clock::time_point m_origin_time;
+
+    std::unique_ptr<QTimer> m_timer;
 };
 
 #endif /* animated_layout_hpp */
