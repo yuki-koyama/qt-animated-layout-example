@@ -81,9 +81,9 @@ void AnimatedLayout::setGeometry(const QRect& rect)
     }
 }
 
-void AnimatedLayout::play() { m_timer->stop(); }
+void AnimatedLayout::play() { m_timer->start(); }
 
-void AnimatedLayout::stop() { m_timer->start(); }
+void AnimatedLayout::stop() { m_timer->stop(); }
 
 void AnimatedLayout::setRandomTargetPositions()
 {
